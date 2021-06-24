@@ -1,17 +1,5 @@
 import { message as Message } from "ant-design-vue";
-
-// 常见的浏览器状态码(枚举)
-enum HttpCodeEnum {
-	REQUEST_ERROR = 400,
-	UN_AUTHORIZED = 401,
-	FORBIDDEN = 403,
-	NOT_FOUNT = 404,
-	REQUEST_TIMEOUT = 408,
-	SERVER_ERROR = 500,
-	SERVER_UN_USE = 503,
-	SERVER_TIMEOUT = 504,
-	HTTP_NOT_SUPPORT = 505
-}
+import { HttpCodeEnum } from "@/enums/httpEnum";
 
 export function checkStatus(status: number, msg: string): void {
 	switch (status) {

@@ -19,10 +19,12 @@ export interface RequestOptions {
 	isShowErrorMsg?: boolean;
 	// 错误的文本信息
 	errorMsg?: string;
-	// 接口地址，不填则使用默认apiUrl
-	apiUrl?: string;
 	// 错误消息提示类型
 	errorMsgType?: "normal" | "modal";
+	// 接口地址，不填则使用默认apiUrl
+	apiUrl?: string;
+	// 是否需要获取接口的code
+	isReturnCode?: boolean;
 }
 
 // 这里要跟后端定好一个返回的数据格式规范

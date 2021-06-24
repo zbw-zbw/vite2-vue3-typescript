@@ -32,11 +32,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, reactive, UnwrapRef, toRaw } from "@vue/runtime-core";
+import { defineComponent, computed, reactive, UnwrapRef, toRaw, onMounted } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import { key } from "@/store";
-import { Login } from "@/api/base";
+import { getProductList, login } from "@/api/user";
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
+
 interface LoginState {
   username: string;
   password: string;
@@ -60,20 +61,42 @@ export default defineComponent({
     const count = computed(() => store.getters["demo/count"]);
     const increment = () => store.dispatch('demo/increment', 100);
 
+    // 登录接口参数
     const LoginState: UnwrapRef<LoginState> = reactive({
       username: '',
       password: '',
     });
 
+    // 登录表单校验规则
     const LoginRules = {
       username: [{ required: true, message: '用户名不能为空！', trigger: 'blur' }],
       password: [{ required: true, message: '密码不能为空！', trigger: 'blur' }],
     }
 
+    // 用户点击登录
     const handleLogin = async () => {
-      const res = await Login(toRaw(LoginState))
-      console.log(res);
+      try {
+        const res = await login(toRaw(LoginState))
+        console.log(res);
+      } catch (error) {
+        console.error(error);
+      }
     };
+
+    onMounted(async () => {
+      // 获取产品列表
+      const productParams = {
+        page: 1,
+        perPage: 10,
+        product_type: 1
+      }
+      try {
+        const res = await getProductList(productParams)
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    })
 
     return {
       count,

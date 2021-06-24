@@ -8,7 +8,7 @@ let pendingMap = new Map<string, Canceler>();
 
 // 拼接每个请求的各个参数，确保每个请求拥有唯一标识
 export const getPendingUrl = (config: AxiosRequestConfig) =>
-	[config.method, config.url, qs.stringify(config.data), qs.stringify(config.params)].join("&");
+	[config.url, config.method, qs.stringify(config.data), qs.stringify(config.params)].join("&");
 
 // 封装一个取消重复请求的类
 export class AxiosCanceler {

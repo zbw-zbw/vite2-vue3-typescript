@@ -3,17 +3,22 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/",
-		redirect: "/home" // 重定向
+		redirect: "/login" // 重定向
+	},
+	{
+		path: "/login",
+		name: "login",
+		component: (/* webpackChunkName: "login" */) => import("@/views/login.vue") // 路由懒加载
 	},
 	{
 		path: "/home",
-		name: "Home",
-		component: (/* webpackChunkName: "Home" */) => import("@/views/Home.vue") // 路由懒加载
+		name: "home",
+		component: (/* webpackChunkName: "home" */) => import("@/views/home.vue") // 路由懒加载
 	},
 	{
 		path: "/detail",
-		name: "Detail",
-		component: (/* webpackChunkName: "Detail" */) => import("@/views/Detail.vue")
+		name: "detail",
+		component: (/* webpackChunkName: "detail" */) => import("@/views/detail.vue")
 	}
 ];
 

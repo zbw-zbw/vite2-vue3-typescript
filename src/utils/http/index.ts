@@ -15,11 +15,11 @@ const commonTransform: AxiosTransform = {
 	 * @description 请求成功后的处理
 	 */
 	handleResData: (res: AxiosResponse<Result>, options: RequestOptions) => {
-		const { isShowMsg, isShowSuccessMsg, successMsg, isShowErrorMsg, errorMsg } = options;
+		const { isShowMsg, isShowSuccessMsg, successMsg, isShowErrorMsg, errorMsg, isReturnCode } = options;
 
-		// code msg result 都需要后端配合统一格式（在type.ts中定义的）
+		// code msg data 都需要后端配合统一格式（在type.ts中定义的）
 		const { code, message, data } = res.data;
-		// 请求成功
+		// 是否请求成功
 		const isSuccess = data && code === 200;
 
 		// 显示提示信息
@@ -33,27 +33,29 @@ const commonTransform: AxiosTransform = {
 			}
 		}
 
-		// 没有返回值的时候直接reject
-		if (!data) return Promise.reject(data);
+		// 直接返回res（有些接口可能需要code值进行判断）
+		if (isReturnCode) return res.data;
+
+		// 没有返回值直接reject
+		if (!data) return Promise.reject(res.data);
 
 		// 接口请求成功，直接返回结果
-		if (code === 200) return data;
+		if (isSuccess) return data;
 
-		// 接口请求失败，统一提示错误信息
+		// 统一错误提示信息
 		if (code === -1) {
 			if (message) {
 				Message.error(message);
 				Promise.reject(new Error(message));
 			} else {
-				const systemError = "操作失败，系统异常！";
-				Message.error(systemError);
-				Promise.reject(new Error(systemError));
+				Message.error("操作失败，系统异常！");
+				Promise.reject(new Error("操作失败，系统异常！"));
 			}
 			return Promise.reject();
 		}
 
-		// 请求失败（这个得根据CRM的具体业务来定）
-		if (!isSuccess) Message.error(res.data.message);
+		// 请求失败的处理（根据CRM的具体业务来定）
+		if (!isSuccess) Message.error(message || "请求失败！");
 
 		return res.data;
 	},
@@ -62,8 +64,8 @@ const commonTransform: AxiosTransform = {
 	 * @description 请求拦截器
 	 */
 	requestInterceptors: config => {
-		const token = "xxxx"; // 请求前加上token
-		token && (config.headers.token = token);
+		const token = "Bearer nTYEm7oNMGChXer3AhIy4cBkTYcQfdUOdJJVuQ3X"; // 请求前加上token
+		token && (config.headers["Authorization"] = token);
 		return config;
 	},
 
@@ -71,7 +73,7 @@ const commonTransform: AxiosTransform = {
 	 * @description 响应拦截器
 	 */
 	responseInterceptors: res => {
-		return res;
+		return res.data;
 	},
 
 	/**
@@ -82,8 +84,12 @@ const commonTransform: AxiosTransform = {
 		const msg: string = response?.data?.error?.message;
 		// 判断请求是否被取消
 		const isCancel = axios.isCancel(error);
-		// 处理业务异常
-		isCancel ? console.warn("请求被取消！") : checkStatus(error.response?.status, msg);
+		if (isCancel) {
+			return Promise.reject("重复请求被取消！");
+		} else {
+			// 处理业务异常
+			checkStatus(error.response?.status, msg);
+		}
 		return error;
 	}
 };
@@ -94,10 +100,11 @@ const commonAxios = new Axios({
 		"Content-Type": "application/json; charset=UTF-8"
 	},
 	transform: commonTransform,
-	// 请求配置项（可选）：为了某些接口需要单独的其他配置
+	// 请求配置项（可选）：为了某些接口需要单独的配置
 	requestOptions: {
-		apiUrl: "http://localhost:8080",
-		errorMsgType: "normal"
+		isReturnCode: false,
+		errorMsgType: "normal",
+		apiUrl: "http://localhost:8080"
 	}
 });
 
