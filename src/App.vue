@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onBeforeUnmount } from "vue";
 import { ConfigProvider } from "ant-design-vue";
 
 export default defineComponent({
@@ -13,9 +13,15 @@ export default defineComponent({
 	components: { ConfigProvider }, // 全局上下文
 	setup() {
 		// 注册一个全局的错误捕获事件
-		window.addEventListener("unhandledrejection", event => {
+		const catchGlobalError = event => {
 			event.preventDefault();
 			console.warn(`捕获到异常: ${event.reason}`);
+		};
+
+		window.addEventListener("unhandledrejection", catchGlobalError);
+
+		onBeforeUnmount(() => {
+			window.removeEventListener("unhandledrejection", catchGlobalError);
 		});
 	}
 });

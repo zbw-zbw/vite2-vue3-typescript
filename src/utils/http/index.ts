@@ -104,7 +104,7 @@ const commonAxios = new Axios({
 	requestOptions: {
 		isReturnCode: false,
 		errorMsgType: "normal",
-		apiUrl: "http://localhost:8080"
+		// apiUrl: "http://localhost:8080"
 	}
 });
 

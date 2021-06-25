@@ -66,8 +66,8 @@ import {
 	MenuFoldOutlined
 } from "@ant-design/icons-vue";
 
-import { computed, defineComponent, ref } from "vue";
-import { RouteRecordRaw, useRoute } from "vue-router";
+import { computed, defineComponent, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import router, { routes } from "@/router";
 
 export default defineComponent({
@@ -90,12 +90,12 @@ export default defineComponent({
 	},
 
 	setup() {
+		const currentRoute = useRoute();
 		const collapsed = ref<boolean>(false);
 		const selectedKeys = ref<string[]>([]);
 		const currentOpenKeys = ref<string[]>([]); // 当前展开菜单
 		const rootSubmenuKeys = ref<string[]>([]); // 根菜单列表
 		const menuList = computed(() => routes.find(item => item.name === "home")!.children);
-		const currentRoute = useRoute().matched;
 
 		menuList.value!.forEach(item => item.meta && rootSubmenuKeys.value.push(item.name as string));
 
@@ -117,6 +117,16 @@ export default defineComponent({
 		const onClicktItem = ({ item, key, keyPath }) => {
 			router.push({ name: key });
 		};
+
+		// 监听路由变化（获取实时的菜单展开和选中项）
+		watch(
+			() => currentRoute.fullPath,
+			() => {
+				selectedKeys.value = [currentRoute.name as string];
+				currentOpenKeys.value = currentRoute.matched.map(item => item.name as string);
+			},
+			{ immediate: true }
+		);
 
 		return { collapsed, menuList, currentOpenKeys, selectedKeys, onOpenChange, onClicktItem };
 	}
@@ -167,6 +177,7 @@ export default defineComponent({
 	.header-wrapper {
 		padding: 0 16px;
 		background: #fff;
+		border-bottom: 1px solid #eee;
 
 		.menu-fold {
 			cursor: pointer;

@@ -3,10 +3,10 @@
 		<!-- 面包屑 -->
 		<a-breadcrumb class="breadcrumb">
 			<a-breadcrumb-item>
-				<router-link to="/home">首页</router-link>
+				<router-link to="/demo">首页</router-link>
 			</a-breadcrumb-item>
 			<a-breadcrumb-item>
-				<router-link to="/detail">详情</router-link>
+				<router-link to="/shop-design">店铺设计</router-link>
 			</a-breadcrumb-item>
 		</a-breadcrumb>
 

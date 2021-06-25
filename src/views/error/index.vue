@@ -4,7 +4,7 @@
 			<div class="error404-body-con-title">4<span>0</span>4</div>
 			<p class="error404-body-con-message">迷路的孩子是否还记得家的方向？</p>
 			<div class="error404-btn-con">
-				<a-button @click="goHome" size="large" type="text" class="back-home">返回首页</a-button>
+				<a-button @click="goHome" size="large" class="back-home">返回首页</a-button>
 				<a-button @click="backPage" size="large" type="primary" class="back">返回上一页</a-button>
 			</div>
 		</div>

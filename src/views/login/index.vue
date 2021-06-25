@@ -30,6 +30,7 @@ import { message as Message } from "ant-design-vue";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import router from "@/router";
 import { store } from "@/store";
+import { useRoute } from "vue-router";
 
 interface LoginState {
 	username: string;
@@ -41,6 +42,7 @@ export default defineComponent({
 	components: { UserOutlined, LockOutlined },
 	setup() {
 		const loginFormRef = ref();
+		const loginLoading = ref(false);
 
 		// 登录接口参数
 		const LoginState: UnwrapRef<LoginState> = reactive({
@@ -48,14 +50,13 @@ export default defineComponent({
 			password: ""
 		});
 
-		const loginLoading = ref(false);
-
 		// 登录表单校验规则
 		const LoginRules = {
 			username: [{ required: true, message: "用户名不能为空！", trigger: "blur" }],
 			password: [{ required: true, message: "密码不能为空！", trigger: "blur" }]
 		};
 
+		const currentRoute = useRoute();
 		// 用户点击登录
 		const submitLogin = async () => {
 			const loginParams = toRaw(LoginState);
@@ -67,10 +68,14 @@ export default defineComponent({
 				hide();
 				loginLoading.value = false;
 			});
+
 			// 登录成功跳转到首页
 			if (code === 200) {
 				Message.success("登录成功！");
-				router.replace("/home");
+				// 判断是否需要重定向页面
+				const redirect = currentRoute.query.redirect as string;
+				const targetPath = redirect ? redirect : "/home";
+				router.replace(targetPath);
 			} else {
 				Message.error(message || "登录失败！");
 			}

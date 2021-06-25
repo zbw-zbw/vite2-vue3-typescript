@@ -1,16 +1,16 @@
 <template>
 	<div>
-		<span>count：{{ count }}</span> &nbsp; &nbsp;
+		<span>vuex中的 count：{{ count }}</span> &nbsp; &nbsp;
 		<a-button type="primary" @click="increment">count++</a-button>
 		<br />
 		<br />
-		<span>我的名字：{{ fullName }}</span> &nbsp; &nbsp;
+		<span>vuex中的 name：{{ fullName }}</span> &nbsp; &nbsp;
 		<a-button type="primary" @click="changeFullName">修改名字</a-button>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, reactive, UnwrapRef, toRaw, onMounted } from "@vue/runtime-core";
+import { defineComponent, computed, onMounted } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import { key } from "@/store";
 import { getProductList, login } from "@/api/user";

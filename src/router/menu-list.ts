@@ -1,5 +1,5 @@
 /**
- * @description 导航区路由
+ * @description 侧边导航区的所有路由
  */
 export default [
 	{
@@ -47,11 +47,20 @@ export default [
 				meta: {
 					title: "所有商品",
 					icon: "PieChartOutlined"
+				}
+			},
+			{
+				path: "/goods/category",
+				name: "all-goods-category",
+				component: () => import("@/views/goods/index.vue"),
+				meta: {
+					title: "商品分类",
+					icon: "PieChartOutlined"
 				},
 				children: [
 					{
-						path: "/goods/hzp",
-						name: "hzp",
+						path: "/goods/category/cosmetic",
+						name: "all-goods-cosmetic",
 						component: () => import("@/views/goods/index.vue"),
 						meta: {
 							title: "化妆品",

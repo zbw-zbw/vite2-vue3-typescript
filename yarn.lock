@@ -986,6 +986,11 @@ node-releases@^1.1.71:
   resolved "https://registry.nlark.com/node-releases/download/node-releases-1.1.73.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fnode-releases%2Fdownload%2Fnode-releases-1.1.73.tgz#dd4e81ddd5277ff846b80b52bb40c49edf7a7b20"
   integrity sha1-3U6B3dUnf/hGuAtSu0DEnt96eyA=
 
+nprogress@^1.0.0-1:
+  version "1.0.0-1"
+  resolved "https://registry.nlark.com/nprogress/download/nprogress-1.0.0-1.tgz#dd4cce2b951f9359028facd6c51cc9c49ecfa1a2"
+  integrity sha1-3UzOK5Ufk1kCj6zWxRzJxJ7PoaI=
+
 object-inspect@^1.9.0:
   version "1.10.3"
   resolved "https://registry.nlark.com/object-inspect/download/object-inspect-1.10.3.tgz#c2aa7d2d09f50c99375704f7a0adf24c5782d369"
