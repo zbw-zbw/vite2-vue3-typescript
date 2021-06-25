@@ -1,72 +1,124 @@
 <template>
 	<a-layout class="layout-wrapper">
 		<!-- 左侧 -->
-		<a-layout-sider v-model:collapsed="collapsed" collapsible theme="dark">
+		<a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible theme="dark">
 			<!-- logo区 -->
-			<logo />
+			<h1 class="logo">
+				<img src="@/assets/logo.png" alt="fandow" width="50" />
+				<span class="title" :hidden="collapsed">凡岛网络</span>
+			</h1>
 			<!-- 导航区 -->
-			<a-menu v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" mode="inline" theme="dark">
-				<aside-menu />
+			<a-menu
+				v-model:selectedKeys="selectedKeys"
+				v-model:openKeys="currentOpenKeys"
+				@openChange="onOpenChange"
+				@click="onClicktItem"
+				mode="inline"
+				theme="dark"
+			>
+				<template v-for="pItem in menuList" :key="pItem.name">
+					<menu-item :menu-data="pItem" />
+				</template>
 			</a-menu>
 		</a-layout-sider>
 		<!-- 右侧 -->
 		<a-layout>
 			<!-- 头部区 -->
-			<a-layout-header class="header">
-				<page-header />
+			<a-layout-header class="header-wrapper">
+				<div>
+					<span class="menu-fold" @click="collapsed = !collapsed">
+						<component :is="collapsed ? 'MenuUnfoldOutlined' : 'MenuFoldOutlined'" />
+					</span>
+				</div>
 			</a-layout-header>
-
 			<!-- 内容区 -->
 			<a-layout-content class="main-content">
 				<tab-views />
 			</a-layout-content>
 			<!-- 尾部区 -->
 			<a-layout-footer class="footer-wrapper">
-				<page-footer />
+				<div>
+					本公众号店铺首页链接为：
+					<a target="_blank" href="http://viplocal.wismall.com/shop/default/createNewUrl/token/547bcb48040a7.html"
+						>http://viplocal.wismall.com/shop/default/createNewUrl/token/547bcb48040a7.html</a
+					>
+				</div>
 			</a-layout-footer>
 		</a-layout>
 	</a-layout>
 </template>
 
 <script lang="ts">
-import PageHeader from "./header/index.vue";
-import Logo from "./logo/index.vue";
-import AsideMenu from "./menu/index.vue";
-import TabViews from "./tab-views/index.vue";
-import PageFooter from "./footer/index.vue";
+import MenuItem from "./components/menu-item.vue";
+import TabViews from "./components/tab-views.vue";
 
-import { defineComponent, ref, reactive, toRefs } from "vue";
-import { Layout } from "ant-design-vue";
+import {
+	PieChartOutlined,
+	DesktopOutlined,
+	UserOutlined,
+	TeamOutlined,
+	FileOutlined,
+	DownOutlined,
+	FieldTimeOutlined,
+	PayCircleOutlined,
+	UsergroupAddOutlined,
+	MenuUnfoldOutlined,
+	MenuFoldOutlined
+} from "@ant-design/icons-vue";
 
-interface DataType {
-	collapsed: boolean;
-	selectedKeys: string[];
-	openKeys: string[];
-}
+import { computed, defineComponent, ref } from "vue";
+import { RouteRecordRaw, useRoute } from "vue-router";
+import router, { routes } from "@/router";
 
 export default defineComponent({
-	name: "App",
+	name: "layout",
 
 	components: {
-		PageHeader,
-		Logo,
-		AsideMenu,
-		PageFooter,
-		TabViews
+		MenuItem,
+		TabViews,
+		PieChartOutlined,
+		DesktopOutlined,
+		UserOutlined,
+		TeamOutlined,
+		FileOutlined,
+		DownOutlined,
+		FieldTimeOutlined,
+		PayCircleOutlined,
+		UsergroupAddOutlined,
+		MenuUnfoldOutlined,
+		MenuFoldOutlined
 	},
 
 	setup() {
-		const data: DataType = reactive({
-			collapsed: ref<boolean>(false),
-			selectedKeys: ref<string[]>(["1"]),
-			openKeys: []
-		});
+		const collapsed = ref<boolean>(false);
+		const selectedKeys = ref<string[]>([]);
+		const currentOpenKeys = ref<string[]>([]); // 当前展开菜单
+		const rootSubmenuKeys = ref<string[]>([]); // 根菜单列表
+		const menuList = computed(() => routes.find(item => item.name === "home")!.children);
+		const currentRoute = useRoute().matched;
 
-		// 注册一个全局的错误捕获事件
-		window.addEventListener("unhandledrejection", event => {
-			console.warn(`未被捕获的Promise异常: ${event.reason}`);
-		});
-		return { ...toRefs(data) };
+		menuList.value!.forEach(item => item.meta && rootSubmenuKeys.value.push(item.name as string));
+
+		/**
+		 * @description	subMenu展开/关闭的回调（单一展开效果）
+		 */
+		const onOpenChange = (openKeys: string[]) => {
+			const latestOpenKey = openKeys[openKeys.length - 1];
+			if (rootSubmenuKeys.value.indexOf(latestOpenKey!) === -1) {
+				currentOpenKeys.value = openKeys;
+			} else {
+				currentOpenKeys.value = latestOpenKey ? [latestOpenKey] : [];
+			}
+		};
+
+		/**
+		 * @description	点击MenuItem的回调（进行路由跳转）
+		 */
+		const onClicktItem = ({ item, key, keyPath }) => {
+			router.push({ name: key });
+		};
+
+		return { collapsed, menuList, currentOpenKeys, selectedKeys, onOpenChange, onClicktItem };
 	}
 });
 </script>
@@ -75,14 +127,54 @@ export default defineComponent({
 .layout-wrapper {
 	min-height: 100vh;
 
-	.header {
-		padding: 0 16px;
+	// logo
+	.logo {
+		width: 100%;
+		height: 64px;
+		margin: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #fff;
+		background: #001529;
+
+		img {
+			vertical-align: middle;
+		}
+
+		.title {
+			font-size: 18px;
+			padding-left: 12px;
+			white-space: nowrap;
+		}
+	}
+
+	// 侧边导航
+	.site-layout-background {
 		background: #fff;
 	}
+
+	:deep(.ant-menu) .ant-menu-item {
+		margin-top: 0 !important;
+	}
+
+	// 内容
 	.main-content {
 		margin: 0 16px;
 	}
 
+	// 头部
+	.header-wrapper {
+		padding: 0 16px;
+		background: #fff;
+
+		.menu-fold {
+			cursor: pointer;
+			font-size: 18px;
+		}
+	}
+
+	// 尾部
 	.footer-wrapper {
 		text-align: center;
 	}
