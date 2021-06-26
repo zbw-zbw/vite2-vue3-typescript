@@ -1,5 +1,5 @@
 <template>
-	<template v-if="menuData.meta">
+	<template v-if="!menuData.meta?.hidden">
 		<!-- 判断是否有子路由 -->
 		<a-sub-menu v-if="menuData.children?.length" :key="menuData.name">
 			<template #title>
@@ -21,8 +21,8 @@
 		</a-sub-menu>
 		<!-- 无子路由直接渲染 -->
 		<a-menu-item v-else :key="menuData.name">
-			<component :is="menuData.meta.icon" />
-			<span> {{ menuData.meta.title }} </span>
+			<component :is="menuData.meta?.icon" />
+			<span>{{ menuData.meta?.title }}</span>
 		</a-menu-item>
 	</template>
 </template>
@@ -38,11 +38,10 @@ import {
 	DownOutlined,
 	FieldTimeOutlined,
 	PayCircleOutlined,
-	UsergroupAddOutlined
 } from "@ant-design/icons-vue";
 
 export default defineComponent({
-	name: "menu-item",
+	name: "MenuItem",
 	components: {
 		PieChartOutlined,
 		DesktopOutlined,
@@ -52,7 +51,6 @@ export default defineComponent({
 		DownOutlined,
 		FieldTimeOutlined,
 		PayCircleOutlined,
-		UsergroupAddOutlined
 	},
 	props: {
 		menuData: {
@@ -60,7 +58,7 @@ export default defineComponent({
 			default: () => ({})
 		}
 	},
-	setup() {}
+	setup() { }
 });
 </script>
 

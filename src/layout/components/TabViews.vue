@@ -5,8 +5,9 @@
 			<a-breadcrumb-item>
 				<router-link to="/demo">首页</router-link>
 			</a-breadcrumb-item>
+			<a-breadcrumb-item>店铺管理</a-breadcrumb-item>
 			<a-breadcrumb-item>
-				<router-link to="/shop-design">店铺设计</router-link>
+				<router-link to="/shop-design/index">首页设置</router-link>
 			</a-breadcrumb-item>
 		</a-breadcrumb>
 
@@ -21,7 +22,7 @@
 import { defineComponent } from "@vue/runtime-core";
 
 export default defineComponent({
-	name: "tab-views"
+	name: "TabViews"
 });
 </script>
 

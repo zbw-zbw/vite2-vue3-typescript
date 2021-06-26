@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import NProgress from "nprogress";
 import "nprogress/css/nprogress.css";
 
-import menuList from "./menu-list";
+import mainContent from "./main-content";
 import errorRoutes from "./error";
 import { getLocalStorage } from "@/utils/storage";
 
@@ -11,19 +11,16 @@ NProgress.configure({ showSpinner: false }); // 关闭loading（转圈圈）
 export const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/",
-		redirect: "/home"
+		name: "Home",
+		redirect: "/demo",
+		component: (/* webpackChunkName: "Home" */) => import("@/layout/index.vue"),
+		meta: { title: "首页" },
+		children: [...mainContent]
 	},
 	{
 		path: "/login",
-		name: "login",
-		component: (/* webpackChunkName: "login" */) => import("@/views//login/index.vue")
-	},
-	{
-		path: "/home",
-		name: "home",
-		component: (/* webpackChunkName: "home" */) => import("@/layout/index.vue"),
-		meta: { title: "首页" },
-		children: [...menuList]
+		name: "Login",
+		component: (/* webpackChunkName: "Login" */) => import("@/views//login/index.vue")
 	},
 	errorRoutes
 ];
@@ -39,16 +36,16 @@ router.beforeEach((to, from, next) => {
 	const token = getLocalStorage("token");
 
 	if (token) {
-		to.name === "login" ? next("/home") : next();
+		to.name === "login" ? next("/") : next();
 	} else {
 		to.name === "login" ? next() : next({ path: "/login", query: { redirect: to.fullPath }, replace: true });
 	}
 	NProgress.done();
 });
 
+// 动态改变页面标题
 router.afterEach(to => {
-	// 动态改变页面标题
-	document.title = (to.meta?.title as string) || (to.name as string) || document.title;
+	document.title = (to.meta?.title as string) || document.title;
 });
 
 export default router;

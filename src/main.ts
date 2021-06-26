@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 
-import antd from "./plugins/antd";
+import antd from "./config/antd";
 import router from "./router";
 import { store, key } from "./store";
 import App from "./App.vue";

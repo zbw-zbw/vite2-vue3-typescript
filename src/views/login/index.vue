@@ -38,7 +38,7 @@ interface LoginState {
 }
 
 export default defineComponent({
-	name: "login",
+	name: "Login",
 	components: { UserOutlined, LockOutlined },
 	setup() {
 		const loginFormRef = ref();
@@ -74,7 +74,7 @@ export default defineComponent({
 				Message.success("登录成功！");
 				// 判断是否需要重定向页面
 				const redirect = currentRoute.query.redirect as string;
-				const targetPath = redirect ? redirect : "/home";
+				const targetPath = redirect ? redirect : "/";
 				router.replace(targetPath);
 			} else {
 				Message.error(message || "登录失败！");

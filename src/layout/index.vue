@@ -16,8 +16,8 @@
 				mode="inline"
 				theme="dark"
 			>
-				<template v-for="pItem in menuList" :key="pItem.name">
-					<menu-item :menu-data="pItem" />
+				<template v-for="item in menuList" :key="item.name">
+					<menu-item :menu-data="item" />
 				</template>
 			</a-menu>
 		</a-layout-sider>
@@ -25,11 +25,7 @@
 		<a-layout>
 			<!-- 头部区 -->
 			<a-layout-header class="header-wrapper">
-				<div>
-					<span class="menu-fold" @click="collapsed = !collapsed">
-						<component :is="collapsed ? 'MenuUnfoldOutlined' : 'MenuFoldOutlined'" />
-					</span>
-				</div>
+				<the-header v-model:collapsed="collapsed" />
 			</a-layout-header>
 			<!-- 内容区 -->
 			<a-layout-content class="main-content">
@@ -37,98 +33,101 @@
 			</a-layout-content>
 			<!-- 尾部区 -->
 			<a-layout-footer class="footer-wrapper">
-				<div>
-					本公众号店铺首页链接为：
-					<a target="_blank" href="http://viplocal.wismall.com/shop/default/createNewUrl/token/547bcb48040a7.html"
-						>http://viplocal.wismall.com/shop/default/createNewUrl/token/547bcb48040a7.html</a
-					>
-				</div>
+				<the-footer />
 			</a-layout-footer>
 		</a-layout>
 	</a-layout>
 </template>
 
 <script lang="ts">
-import MenuItem from "./components/menu-item.vue";
-import TabViews from "./components/tab-views.vue";
+import MenuItem from "./components/MenuItem.vue";
+import TabViews from "./components/TabViews.vue";
+import TheHeader from './components/TheHeader.vue';
+import TheFooter from './components/TheFooter.vue';
 
-import {
-	PieChartOutlined,
-	DesktopOutlined,
-	UserOutlined,
-	TeamOutlined,
-	FileOutlined,
-	DownOutlined,
-	FieldTimeOutlined,
-	PayCircleOutlined,
-	UsergroupAddOutlined,
-	MenuUnfoldOutlined,
-	MenuFoldOutlined
-} from "@ant-design/icons-vue";
 
-import { computed, defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, reactive, ref, toRefs, watch } from "vue";
 import { useRoute } from "vue-router";
 import router, { routes } from "@/router";
 
+interface MenuStateType {
+	selectedKeys: string[];
+	currentOpenKeys: string[];
+	rootSubMenuKeys: string[];
+}
+
 export default defineComponent({
-	name: "layout",
+	name: "Layout",
 
 	components: {
 		MenuItem,
+		TheHeader,
+		TheFooter,
 		TabViews,
-		PieChartOutlined,
-		DesktopOutlined,
-		UserOutlined,
-		TeamOutlined,
-		FileOutlined,
-		DownOutlined,
-		FieldTimeOutlined,
-		PayCircleOutlined,
-		UsergroupAddOutlined,
-		MenuUnfoldOutlined,
-		MenuFoldOutlined
 	},
 
 	setup() {
-		const currentRoute = useRoute();
-		const collapsed = ref<boolean>(false);
-		const selectedKeys = ref<string[]>([]);
-		const currentOpenKeys = ref<string[]>([]); // 当前展开菜单
-		const rootSubmenuKeys = ref<string[]>([]); // 根菜单列表
-		const menuList = computed(() => routes.find(item => item.name === "home")!.children);
+		/**
+		 *	@description 菜单相关数据
+		 */
+		const menuState = reactive({
+			selectedKeys: [], // 当前选中项
+			currentOpenKeys: [], // 当前展开菜单
+			rootSubMenuKeys: [] // 根菜单列表
+		}) as MenuStateType;
 
-		menuList.value!.forEach(item => item.meta && rootSubmenuKeys.value.push(item.name as string));
+		const collapsed = ref<boolean>(false); // 是否折叠
+
+		const currentRoute = useRoute(); // 获取当前路由实例
+
+		const menuList = computed(() => routes.find(item => item.name === "Home")!.children); // 所有菜单列表
+		menuList.value!.forEach(item => item.meta && menuState.rootSubMenuKeys.push(item.name as string));
 
 		/**
 		 * @description	subMenu展开/关闭的回调（单一展开效果）
 		 */
 		const onOpenChange = (openKeys: string[]) => {
 			const latestOpenKey = openKeys[openKeys.length - 1];
-			if (rootSubmenuKeys.value.indexOf(latestOpenKey!) === -1) {
-				currentOpenKeys.value = openKeys;
+			if (menuState.rootSubMenuKeys.indexOf(latestOpenKey!) === -1) {
+				menuState.currentOpenKeys = openKeys;
 			} else {
-				currentOpenKeys.value = latestOpenKey ? [latestOpenKey] : [];
+				menuState.currentOpenKeys = latestOpenKey ? [latestOpenKey] : [];
 			}
 		};
 
 		/**
 		 * @description	点击MenuItem的回调（进行路由跳转）
 		 */
-		const onClicktItem = ({ item, key, keyPath }) => {
+		const onClicktItem = ({ _, key }) => {
 			router.push({ name: key });
 		};
 
-		// 监听路由变化（获取实时的菜单展开和选中项）
+		/**
+		 * @description	获取菜单当前选中项和展开项
+		 */
+		const getMenuCurrentKeys = () => {
+			menuState.selectedKeys = [currentRoute.name as string];
+			menuState.currentOpenKeys = currentRoute.matched.map(item => item.name as string);
+		};
+
+		/**
+		 * @description 监听菜单折叠和路由变化
+		 */
 		watch(
-			() => currentRoute.fullPath,
-			() => {
-				selectedKeys.value = [currentRoute.name as string];
-				currentOpenKeys.value = currentRoute.matched.map(item => item.name as string);
+			() => [collapsed.value, currentRoute.fullPath],
+			([newCollapsed]) => {
+				!newCollapsed && getMenuCurrentKeys(); // 解决菜单折叠状态下，点击MenuItem不失焦问题
 			},
 			{ immediate: true }
 		);
 
-		return { collapsed, menuList, currentOpenKeys, selectedKeys, onOpenChange, onClicktItem };
+		return {
+			collapsed,
+			menuList,
+			...toRefs(menuState),
+			onOpenChange,
+			onClicktItem,
+		};
 	}
 });
 </script>
@@ -164,8 +163,13 @@ export default defineComponent({
 		background: #fff;
 	}
 
-	:deep(.ant-menu) .ant-menu-item {
-		margin-top: 0 !important;
+	:deep(.ant-menu) {
+		span {
+			white-space: nowrap;
+		}
+		.ant-menu-item {
+			margin-top: 0 !important;
+		}
 	}
 
 	// 内容
@@ -178,11 +182,6 @@ export default defineComponent({
 		padding: 0 16px;
 		background: #fff;
 		border-bottom: 1px solid #eee;
-
-		.menu-fold {
-			cursor: pointer;
-			font-size: 18px;
-		}
 	}
 
 	// 尾部

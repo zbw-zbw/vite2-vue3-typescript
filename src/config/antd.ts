@@ -12,7 +12,9 @@ import {
 	Modal,
 	Row,
 	Space,
-	Table
+	Table,
+	Avatar,
+	Tooltip
 } from "ant-design-vue";
 
 // 中间件
@@ -30,7 +32,9 @@ const antdInstall: Plugin = app => {
 		.use(Form)
 		.use(Input)
 		.use(Modal)
-		.use(Table);
+		.use(Table)
+		.use(Avatar)
+		.use(Tooltip);
 };
 
 export default antdInstall;

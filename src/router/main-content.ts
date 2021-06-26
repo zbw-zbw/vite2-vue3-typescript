@@ -3,9 +3,18 @@
  */
 export default [
 	{
+		path: "/personal-center",
+		name: "PersonalCenter",
+		component: (/* webpackChunkName: "PersonalCenter" */) => import("@/views/personal-center/index.vue"),
+		meta: {
+			title: "个人中心",
+			hidden: true
+		}
+	},
+	{
 		path: "/demo",
-		name: "demo",
-		component: (/* webpackChunkName: "demo" */) => import("@/views/demo/index.vue"),
+		name: "Demo",
+		component: (/* webpackChunkName: "Demo" */) => import("@/views/demo/index.vue"),
 		meta: {
 			title: "写个demo",
 			icon: "PieChartOutlined"
@@ -13,7 +22,7 @@ export default [
 	},
 	{
 		path: "/shop-design",
-		name: "shop-design",
+		name: "shopDesign",
 		component: () => import("@/views/shop-design/index.vue"),
 		meta: {
 			title: "店铺管理",
@@ -22,10 +31,10 @@ export default [
 		children: [
 			{
 				path: "/shop-design/index",
-				name: "shop-design-index",
+				name: "shopDesignIndex",
 				component: () => import("@/views/shop-design/index.vue"),
 				meta: {
-					title: "首页设计",
+					title: "首页设置",
 					icon: "UserOutlined"
 				}
 			}
@@ -33,7 +42,7 @@ export default [
 	},
 	{
 		path: "/goods",
-		name: "goods",
+		name: "Goods",
 		component: () => import("@/views/goods/index.vue"),
 		meta: {
 			title: "商品管理",
@@ -42,7 +51,7 @@ export default [
 		children: [
 			{
 				path: "/goods/allGoods",
-				name: "all-goods",
+				name: "AllGoods",
 				component: () => import("@/views/goods/index.vue"),
 				meta: {
 					title: "所有商品",
@@ -51,7 +60,7 @@ export default [
 			},
 			{
 				path: "/goods/category",
-				name: "all-goods-category",
+				name: "AllGoodsCategory",
 				component: () => import("@/views/goods/index.vue"),
 				meta: {
 					title: "商品分类",
@@ -60,7 +69,7 @@ export default [
 				children: [
 					{
 						path: "/goods/category/cosmetic",
-						name: "all-goods-cosmetic",
+						name: "AllGoodsCosmetic",
 						component: () => import("@/views/goods/index.vue"),
 						meta: {
 							title: "化妆品",
@@ -73,7 +82,7 @@ export default [
 	},
 	{
 		path: "/member",
-		name: "member",
+		name: "Member",
 		component: () => import("@/views/member/index.vue"),
 		meta: {
 			title: "会员中心",
@@ -82,7 +91,7 @@ export default [
 	},
 	{
 		path: "/activity",
-		name: "activity",
+		name: "Activity",
 		component: () => import("@/views/activity/index.vue"),
 		meta: {
 			title: "活动管理",
@@ -91,7 +100,7 @@ export default [
 	},
 	{
 		path: "/order",
-		name: "order",
+		name: "Order",
 		component: () => import("@/views/order/index.vue"),
 		meta: {
 			title: "订单管理",
@@ -100,7 +109,7 @@ export default [
 	},
 	{
 		path: "/fans",
-		name: "fans",
+		name: "Fans",
 		component: () => import("@/views/fans/index.vue"),
 		meta: {
 			title: "粉丝管理",

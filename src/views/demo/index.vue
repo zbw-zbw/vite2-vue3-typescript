@@ -34,21 +34,6 @@ export default defineComponent({
 		const count = computed(() => store.getters["demo/count"]);
 		const increment = () => store.dispatch("demo/increment", 100);
 
-		onMounted(async () => {
-			// 获取产品列表
-			const productParams = {
-				page: 1,
-				perPage: 10,
-				product_type: 1
-			};
-			try {
-				const res = await getProductList(productParams);
-				console.log(res);
-			} catch (error) {
-				console.log(error);
-			}
-		});
-
 		return {
 			count,
 			fullName,
