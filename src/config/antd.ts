@@ -14,7 +14,9 @@ import {
 	Space,
 	Table,
 	Avatar,
-	Tooltip
+	Tooltip,
+	Popover,
+	Popconfirm
 } from "ant-design-vue";
 
 // 中间件
@@ -34,6 +36,8 @@ const antdInstall: Plugin = app => {
 		.use(Modal)
 		.use(Table)
 		.use(Avatar)
+		.use(Popover)
+		.use(Popconfirm)
 		.use(Tooltip);
 };
 

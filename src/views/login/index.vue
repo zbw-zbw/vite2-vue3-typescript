@@ -28,7 +28,7 @@
 import { defineComponent, reactive, ref, toRaw, UnwrapRef } from "@vue/runtime-core";
 import { message as Message } from "ant-design-vue";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
-import router from "@/router";
+import router, { defaultRoute } from "@/router";
 import { store } from "@/store";
 import { useRoute } from "vue-router";
 
@@ -74,7 +74,7 @@ export default defineComponent({
 				Message.success("登录成功！");
 				// 判断是否需要重定向页面
 				const redirect = currentRoute.query.redirect as string;
-				const targetPath = redirect ? redirect : "/";
+				const targetPath = redirect ? redirect : defaultRoute;
 				router.replace(targetPath);
 			} else {
 				Message.error(message || "登录失败！");

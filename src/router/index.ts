@@ -8,11 +8,16 @@ import { getLocalStorage } from "@/utils/storage";
 
 NProgress.configure({ showSpinner: false }); // 关闭loading（转圈圈）
 
+export const defaultRoute = "/demo"; // 登录后默认跳转的页面
+
 export const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/",
+		redirect: defaultRoute
+	},
+	{
+		path: defaultRoute,
 		name: "Home",
-		redirect: "/demo",
 		component: (/* webpackChunkName: "Home" */) => import("@/layout/index.vue"),
 		meta: { title: "首页" },
 		children: [...mainContent]
@@ -34,11 +39,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 	NProgress.start();
 	const token = getLocalStorage("token");
-
 	if (token) {
-		to.name === "login" ? next("/") : next();
+		to.name === "Login" ? next(defaultRoute) : next();
 	} else {
-		to.name === "login" ? next() : next({ path: "/login", query: { redirect: to.fullPath }, replace: true });
+		to.name === "Login" ? next() : next({ path: "/login", query: { redirect: to.fullPath }, replace: true });
 	}
 	NProgress.done();
 });

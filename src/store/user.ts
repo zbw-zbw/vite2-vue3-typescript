@@ -1,6 +1,6 @@
 import { Module } from "vuex";
 import { State as RootState } from "./index";
-import { login } from "@/api/user";
+import { loginApi } from "@/api/user";
 import { getLocalStorage, setLocalStorage } from "@/utils/storage";
 
 export interface State {
@@ -29,7 +29,7 @@ export default {
 		// 用户登录（处理token和userInfo）
 		async login({ commit }, userInfo) {
 			try {
-				const res = await login(userInfo);
+				const res = await loginApi(userInfo);
 				const { code, data } = res;
 				if (code === 200) {
 					setLocalStorage("userInfo", data);
