@@ -8,7 +8,7 @@ import { getLocalStorage } from "@/utils/storage";
 
 NProgress.configure({ showSpinner: false }); // 关闭loading（转圈圈）
 
-export const defaultRoute = "/demo"; // 登录后默认跳转的页面
+export const defaultRoute = "/home"; // 登录后默认跳转的页面
 
 export const routes: Array<RouteRecordRaw> = [
 	{
@@ -17,15 +17,19 @@ export const routes: Array<RouteRecordRaw> = [
 	},
 	{
 		path: defaultRoute,
-		name: "Home",
-		component: (/* webpackChunkName: "Home" */) => import("@/layout/index.vue"),
+		name: "Layout",
+		component: (/* webpackChunkName: "Layout" */) => import("@/layout/index.vue"),
 		meta: { title: "首页" },
 		children: [...mainContent]
 	},
 	{
 		path: "/login",
 		name: "Login",
-		component: (/* webpackChunkName: "Login" */) => import("@/views//login/index.vue")
+		component: (/* webpackChunkName: "Login" */) => import("@/views/login/index.vue")
+	},
+	{
+		path: "/:pathMatch(.*)*", // 用户输入不存在的路由重定向到404页面（这里踩坑了：只能用正则，不然会报错）
+		redirect: "/404"
 	},
 	errorRoutes
 ];
@@ -39,7 +43,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 	NProgress.start();
 	const token = getLocalStorage("token");
-	
+
 	if (token) {
 		to.name === "Login" ? next(defaultRoute) : next();
 	} else {
@@ -53,8 +57,9 @@ router.afterEach(to => {
 	document.title = (to.meta?.title as string) || document.title;
 });
 
-router.onError(() => {
+router.onError(error => {
 	NProgress.done();
+	console.log("路由跳转错误", error);
 });
 
 export default router;

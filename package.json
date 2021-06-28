@@ -1,7 +1,7 @@
 {
-	"name": "crm.wismall.com",
+	"name": "backoffice.wismall.com",
 	"version": "1.0.0",
-	"description": "CRM后台管理系统",
+	"description": "小程序后台管理系统",
 	"keywords": [
 		"FANDOW",
 		"CRM",
@@ -12,7 +12,7 @@
 		"HUFU"
 	],
 	"author": {
-		"name": "kyrie wen"
+		"name": "zbw"
 	},
 	"license": "MIT",
 	"scripts": {

@@ -3,6 +3,11 @@
  */
 export default [
 	{
+		path: "/home",
+		name: "Home",
+		component: (/* webpackChunkName: "Home" */) => import("@/views/home/index.vue")
+	},
+	{
 		path: "/personal-center",
 		name: "PersonalCenter",
 		component: (/* webpackChunkName: "PersonalCenter" */) => import("@/views/personal-center/index.vue"),
@@ -16,8 +21,8 @@ export default [
 		name: "Demo",
 		component: (/* webpackChunkName: "Demo" */) => import("@/views/demo/index.vue"),
 		meta: {
-			title: "写个demo",
-			icon: "PieChartOutlined"
+			title: "Vuex Demo",
+			icon: "PaperClipOutlined"
 		}
 	},
 	{
@@ -43,7 +48,7 @@ export default [
 	{
 		path: "/goods",
 		name: "Goods",
-		component: () => import("@/views/goods/index.vue"),
+		component: () => import("@/views/shop-design/index.vue"),
 		meta: {
 			title: "商品管理",
 			icon: "DesktopOutlined"
@@ -52,7 +57,7 @@ export default [
 			{
 				path: "/goods/allGoods",
 				name: "AllGoods",
-				component: () => import("@/views/goods/index.vue"),
+				component: () => import("@/views/shop-design/index.vue"),
 				meta: {
 					title: "所有商品",
 					icon: "PieChartOutlined"
@@ -61,7 +66,7 @@ export default [
 			{
 				path: "/goods/category",
 				name: "AllGoodsCategory",
-				component: () => import("@/views/goods/index.vue"),
+				component: () => import("@/views/shop-design/index.vue"),
 				meta: {
 					title: "商品分类",
 					icon: "PieChartOutlined"
@@ -70,7 +75,7 @@ export default [
 					{
 						path: "/goods/category/cosmetic",
 						name: "AllGoodsCosmetic",
-						component: () => import("@/views/goods/index.vue"),
+						component: () => import("@/views/shop-design/index.vue"),
 						meta: {
 							title: "化妆品",
 							icon: "TeamOutlined"
@@ -83,7 +88,7 @@ export default [
 	{
 		path: "/member",
 		name: "Member",
-		component: () => import("@/views/member/index.vue"),
+		component: () => import("@/views/shop-design/index.vue"),
 		meta: {
 			title: "会员中心",
 			icon: "UserOutlined"
@@ -92,7 +97,7 @@ export default [
 	{
 		path: "/activity",
 		name: "Activity",
-		component: () => import("@/views/activity/index.vue"),
+		component: () => import("@/views/shop-design/index.vue"),
 		meta: {
 			title: "活动管理",
 			icon: "TeamOutlined"
@@ -101,7 +106,7 @@ export default [
 	{
 		path: "/order",
 		name: "Order",
-		component: () => import("@/views/order/index.vue"),
+		component: () => import("@/views/shop-design/index.vue"),
 		meta: {
 			title: "订单管理",
 			icon: "PayCircleOutlined"
@@ -110,7 +115,7 @@ export default [
 	{
 		path: "/fans",
 		name: "Fans",
-		component: () => import("@/views/fans/index.vue"),
+		component: () => import("@/views/shop-design/index.vue"),
 		meta: {
 			title: "粉丝管理",
 			icon: "FileOutlined"

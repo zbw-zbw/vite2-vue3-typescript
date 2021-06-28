@@ -1,5 +1,5 @@
 <template>
-	<template v-if="!menuData.meta?.hidden">
+	<template v-if="menuData.meta && !menuData.meta.hidden">
 		<!-- 判断是否有子路由 -->
 		<a-sub-menu v-if="menuData.children?.length" :key="menuData.name">
 			<template #title>
@@ -30,6 +30,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import {
+	PaperClipOutlined,
 	PieChartOutlined,
 	DesktopOutlined,
 	UserOutlined,
@@ -37,12 +38,13 @@ import {
 	FileOutlined,
 	DownOutlined,
 	FieldTimeOutlined,
-	PayCircleOutlined,
+	PayCircleOutlined
 } from "@ant-design/icons-vue";
 
 export default defineComponent({
 	name: "MenuItem",
 	components: {
+		PaperClipOutlined,
 		PieChartOutlined,
 		DesktopOutlined,
 		UserOutlined,
@@ -50,7 +52,7 @@ export default defineComponent({
 		FileOutlined,
 		DownOutlined,
 		FieldTimeOutlined,
-		PayCircleOutlined,
+		PayCircleOutlined
 	},
 	props: {
 		menuData: {
@@ -58,7 +60,7 @@ export default defineComponent({
 			default: () => ({})
 		}
 	},
-	setup() { }
+	setup() {}
 });
 </script>
 

@@ -10,10 +10,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted } from "@vue/runtime-core";
+import { defineComponent, computed } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import { key } from "@/store";
-import { getProductList, login } from "@/api/user";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({

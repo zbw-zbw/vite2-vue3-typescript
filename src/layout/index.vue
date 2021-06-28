@@ -32,9 +32,9 @@
 				<tab-views />
 			</a-layout-content>
 			<!-- 尾部区 -->
-			<a-layout-footer class="footer-wrapper">
+			<!-- <a-layout-footer class="footer-wrapper">
 				<the-footer />
-			</a-layout-footer>
+			</a-layout-footer> -->
 		</a-layout>
 	</a-layout>
 </template>
@@ -42,13 +42,15 @@
 <script lang="ts">
 import MenuItem from "./components/MenuItem.vue";
 import TabViews from "./components/TabViews.vue";
-import TheHeader from './components/TheHeader.vue';
-import TheFooter from './components/TheFooter.vue';
-
+import TheHeader from "./components/TheHeader.vue";
+import TheFooter from "./components/TheFooter.vue";
 
 import { computed, defineComponent, reactive, ref, toRefs, watch } from "vue";
 import { useRoute } from "vue-router";
 import router, { routes } from "@/router";
+import { BreadCrumbType } from "@/store/user";
+import { useStore } from "vuex";
+import { key } from "@/store";
 
 interface MenuStateType {
 	selectedKeys: string[];
@@ -63,10 +65,11 @@ export default defineComponent({
 		MenuItem,
 		TheHeader,
 		TheFooter,
-		TabViews,
+		TabViews
 	},
 
 	setup() {
+		const store = useStore(key);
 		/**
 		 *	@description 菜单相关数据
 		 */
@@ -80,7 +83,7 @@ export default defineComponent({
 
 		const currentRoute = useRoute(); // 获取当前路由实例
 
-		const menuList = computed(() => routes.find(item => item.name === "Home")!.children); // 所有菜单列表
+		const menuList = computed(() => routes.find(item => item.name === "Layout")!.children); // 所有菜单列表
 		menuList.value!.forEach(item => item.meta && menuState.rootSubMenuKeys.push(item.name as string));
 
 		/**
@@ -117,6 +120,16 @@ export default defineComponent({
 			() => [collapsed.value, currentRoute.fullPath],
 			([newCollapsed]) => {
 				!newCollapsed && getMenuCurrentKeys(); // 解决菜单折叠状态下，点击MenuItem不失焦问题
+				/**
+				 * @description 动态改变面包屑
+				 */
+				const breadcrumbItems: BreadCrumbType[] = currentRoute.matched.map(item => ({
+					path: item.path,
+					title: item.meta.title as string
+					// isLink: item.name === 'Home' || !item.children.length	// 看看是否需要禁止跳转
+				}));
+
+				store.commit("user/changeBreadCrumbItems", breadcrumbItems);
 			},
 			{ immediate: true }
 		);
@@ -126,7 +139,7 @@ export default defineComponent({
 			menuList,
 			...toRefs(menuState),
 			onOpenChange,
-			onClicktItem,
+			onClicktItem
 		};
 	}
 });
@@ -170,11 +183,6 @@ export default defineComponent({
 		.ant-menu-item {
 			margin-top: 0 !important;
 		}
-	}
-
-	// 内容
-	.main-content {
-		margin: 0 16px;
 	}
 
 	// 头部

@@ -21,7 +21,7 @@ export default {
 			router.go(-1);
 		};
 		const goHome = () => {
-			router.push({ name: "home" });
+			router.push({ name: "Home" });
 		};
 
 		return { backPage, goHome };

@@ -3,19 +3,27 @@ import { State as RootState } from "./index";
 import { loginApi } from "@/api/user";
 import { getLocalStorage, setLocalStorage } from "@/utils/storage";
 
+export interface BreadCrumbType {
+	path: string;
+	title: string;
+}
+
 export interface State {
 	token: string;
 	userInfo: object;
+	breadcrumbItems: BreadCrumbType[];
 }
 
 export default {
 	namespaced: true,
 	state: {
-		token: getLocalStorage("token", ""),
-		userInfo: getLocalStorage("userInfo", {})
+		token: getLocalStorage("token", ""),	// 用户token
+		userInfo: getLocalStorage("userInfo", {}),	// 用户信息
+		breadcrumbItems: [] // 面包屑
 	},
 	getters: {
-		token: state => state.token
+		token: state => state.token,
+		breadcrumbItems: state => state.breadcrumbItems
 	},
 	mutations: {
 		setToken: (state: State, token: State["token"]) => {
@@ -23,6 +31,9 @@ export default {
 		},
 		setUserInfo: (state: State, userInfo: State["userInfo"]) => {
 			state.userInfo = userInfo;
+		},
+		changeBreadCrumbItems: (state: State, breadcrumbItems: State["breadcrumbItems"]) => {
+			state.breadcrumbItems = breadcrumbItems;
 		}
 	},
 	actions: {

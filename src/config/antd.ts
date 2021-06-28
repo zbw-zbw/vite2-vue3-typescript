@@ -4,6 +4,7 @@ import {
 	Breadcrumb,
 	Button,
 	Col,
+	Card,
 	Dropdown,
 	Form,
 	Input,
@@ -24,8 +25,9 @@ const antdInstall: Plugin = app => {
 	app
 		.use(Row)
 		.use(Col)
-		.use(Layout)
+		.use(Card)
 		.use(Menu)
+		.use(Layout)
 		.use(Breadcrumb)
 		.use(Button)
 		.use(Dropdown)

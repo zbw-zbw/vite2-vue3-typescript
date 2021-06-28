@@ -101,7 +101,7 @@ export default defineComponent({
 			{
 				title: "净含量 / g",
 				align: "center",
-				dataIndex: "listing"
+				customRender: ({ _, record: { net_weight, net_unit } }) => h("span", {}, net_weight + net_unit)
 			},
 			{
 				title: "操作",
@@ -131,7 +131,8 @@ export default defineComponent({
 			pageSize: 10,
 			total: 0,
 			showQuickJumper: true,
-			showSizeChanger: true
+			showSizeChanger: true,
+			showTotal: total => `共 ${total} 条`
 		});
 
 		const handleChange = pagination => {

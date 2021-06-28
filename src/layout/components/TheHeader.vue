@@ -92,12 +92,12 @@ export default defineComponent({
 		/**
 		 * @description 修改头像
 		 */
-		const userList = ["张", "宝文", "张宝文", "凯利欧文"];
-		const colorList = ["#f56a00", "#7265e6", "#ffbf00", "#00a2ae"];
-		const userName = ref<string>(userList[0]);
+		const userList = ["超", "超级管理员", "admin"];
+		const colorList = ["#f56a00", "#7265e6", "#ffbf00"];
+		const userName = ref<string>(userList[2]);
 		const avatarBgColor = ref<string>(colorList[0]);
 		const changeUserName = () => {
-			const index = (Math.random() * 4) >>> 0; // 学以致用 位运算符取整
+			const index = (Math.random() * 3) >>> 0; // 学以致用 位运算符取整
 			console.log(index);
 			userName.value = userList[index];
 			avatarBgColor.value = colorList[index];
