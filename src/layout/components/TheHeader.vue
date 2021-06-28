@@ -110,8 +110,6 @@ export default defineComponent({
 			Modal.confirm({
 				title: "您确定要退出登录吗？",
 				icon: createVNode(QuestionCircleOutlined),
-				okText: "确定",
-				cancelText: "取消",
 				onOk() {
 					localStorage.clear();
 					window.location.reload();

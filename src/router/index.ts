@@ -39,6 +39,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 	NProgress.start();
 	const token = getLocalStorage("token");
+	
 	if (token) {
 		to.name === "Login" ? next(defaultRoute) : next();
 	} else {
@@ -50,6 +51,10 @@ router.beforeEach((to, from, next) => {
 // 动态改变页面标题
 router.afterEach(to => {
 	document.title = (to.meta?.title as string) || document.title;
+});
+
+router.onError(() => {
+	NProgress.done();
 });
 
 export default router;

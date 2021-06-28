@@ -1,16 +1,19 @@
 <template>
 	<div>
-		<a-table rowKey="id" :columns="columns" :data-source="list" bordered :loading="loading">
+		<a-table
+			bordered
+			rowKey="id"
+			:loading="loading"
+			:columns="columns"
+			:data-source="list"
+			:row-selection="rowSelection"
+			:pagination="paginationOptions"
+			@change="handleChange"
+		>
 			<template #action="{ record }">
 				<a-space>
 					<a-button type="primary" size="small" @click="handleEdit(record)">编辑</a-button>
-					<a-popconfirm
-						title="你确定要删除吗？"
-						placement="left"
-						ok-text="确定"
-						cancel-text="取消"
-						@confirm="handleDel(record)"
-					>
+					<a-popconfirm title="你确定要删除吗？" placement="left" @confirm="handleDel(record)">
 						<a-button type="danger" size="small">删除</a-button>
 					</a-popconfirm>
 				</a-space>
@@ -27,15 +30,36 @@ import { ColumnProps } from "ant-design-vue/lib/table/interface";
 import { QuestionCircleOutlined } from "@ant-design/icons-vue";
 import { message as Message } from "ant-design-vue";
 
+type Key = ColumnProps["key"];
+
+interface DataType {
+	key: Key;
+	name: string;
+	age: number;
+	address: string;
+}
+
 export default defineComponent({
 	name: "shop-design",
 	components: {
 		QuestionCircleOutlined
 	},
 	setup() {
+		/**
+		 * @description 表格数据
+		 */
 		const data = reactive({
 			list: [],
 			loading: false
+		});
+
+		/**
+		 * @description 搜索参数
+		 */
+		const searchParams = reactive({
+			page: 1,
+			perPage: 10,
+			product_type: 1
 		});
 
 		/**
@@ -86,21 +110,53 @@ export default defineComponent({
 			}
 		];
 
+		/**
+		 * @description 表格选择行
+		 */
+		const rowSelection = {
+			onChange: (selectedRowKeys: Key[], selectedRows: DataType[]) => {
+				console.log(`selectedRowKeys: ${selectedRowKeys}`, "selectedRows: ", selectedRows);
+			},
+			getCheckboxProps: (record: DataType) => ({
+				disabled: record.name === "Disabled User", // Column configuration not to be checked
+				name: record.name
+			})
+		};
+
+		/**
+		 * @description 表格分页配置
+		 */
+		const paginationOptions = reactive({
+			current: 1,
+			pageSize: 10,
+			total: 0,
+			showQuickJumper: true,
+			showSizeChanger: true
+		});
+
+		const handleChange = pagination => {
+			const { current, pageSize } = pagination;
+			searchParams.page = current;
+			searchParams.perPage = pageSize;
+			getProductList();
+		};
+
+		/**
+		 * @description	获取产品列表
+		 */
 		const getProductList = async () => {
-			// 获取产品列表
-			const productParams = {
-				page: 1,
-				perPage: 10,
-				product_type: 1
-			};
 			try {
 				data.loading = true;
-				const { items } = await getProductListApi(productParams);
+				const { items } = await getProductListApi(searchParams);
 				data.list = items;
 				data.loading = false;
 			} catch (error) {
 				console.log(error);
 				data.list = error.items; // 这里走error是因为axios里我默认封装是以data为返回值，这里借用采购的接口 返回的是items
+				const { currentPage: current, perPage: pageSize, totalCount: total } = error._meta;
+				paginationOptions.current = current;
+				paginationOptions.pageSize = pageSize;
+				paginationOptions.total = total;
 				data.loading = false;
 			}
 		};
@@ -138,8 +194,11 @@ export default defineComponent({
 		});
 
 		return {
-			columns,
 			...toRefs(data),
+			columns,
+			rowSelection,
+			paginationOptions,
+			handleChange,
 			handleEdit,
 			handleDel
 		};
@@ -147,4 +206,4 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style lang="less" scoped></style>

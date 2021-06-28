@@ -1,5 +1,5 @@
-// 默认过期时间为7天
-const DEFAULT_CACHE_TIMEOUT = 7 * 24 * 60 * 60 * 1000;
+// 默认过期时间为1天
+const DEFAULT_CACHE_TIMEOUT = 1 * 24 * 60 * 60 * 1000;
 
 /**
  * @description 从localStorage中拿数据
@@ -9,7 +9,7 @@ export function getLocalStorage(key: string, def: any = null) {
 	if (stringData) {
 		try {
 			const { expire, value } = JSON.parse(stringData);
-			// 没过期直接返回value
+			// 没过期直接返回token 过期则返回默认值
 			if (expire > Date.now()) return value;
 		} catch (error) {
 			return def;

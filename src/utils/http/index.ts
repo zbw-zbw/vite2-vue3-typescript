@@ -6,6 +6,7 @@ import { checkStatus } from "./checkStatus";
 import { AxiosTransform } from "./axiosTransform";
 import { RequestOptions, Result } from "./types";
 import { message as Message, Modal } from "ant-design-vue";
+import { getLocalStorage } from "../storage";
 
 /**
  * @description 拦截器和数据处理（可选）
@@ -64,7 +65,7 @@ const commonTransform: AxiosTransform = {
 	 * @description 请求拦截器
 	 */
 	requestInterceptors: config => {
-		const token = "Bearer nTYEm7oNMGChXer3AhIy4cBkTYcQfdUOdJJVuQ3X"; // 请求前加上token
+		const token = getLocalStorage("token"); // 请求前加上token
 		token && (config.headers["Authorization"] = token);
 		return config;
 	},
@@ -103,7 +104,7 @@ const commonAxios = new Axios({
 	// 请求配置项（可选）：为了某些接口需要单独的配置
 	requestOptions: {
 		isReturnCode: false,
-		errorMsgType: "normal",
+		errorMsgType: "normal"
 		// apiUrl: "http://localhost:8080"
 	}
 });

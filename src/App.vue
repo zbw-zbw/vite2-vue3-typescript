@@ -1,5 +1,5 @@
 <template>
-	<config-provider>
+	<config-provider :locale="znCN">
 		<router-view></router-view>
 	</config-provider>
 </template>
@@ -7,6 +7,7 @@
 <script lang="ts">
 import { defineComponent, onBeforeUnmount } from "vue";
 import { ConfigProvider } from "ant-design-vue";
+import znCN from "ant-design-vue/es/locale/zh_CN"; // antd中文包
 
 export default defineComponent({
 	name: "App",
@@ -23,6 +24,8 @@ export default defineComponent({
 		onBeforeUnmount(() => {
 			window.removeEventListener("unhandledrejection", catchGlobalError);
 		});
+
+		return { znCN };
 	}
 });
 </script>
