@@ -16,7 +16,7 @@ import { key } from "@/store";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
-	name: "demo",
+	name: "Demo",
 	components: {
 		UserOutlined,
 		LockOutlined
