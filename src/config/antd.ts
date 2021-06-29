@@ -17,7 +17,10 @@ import {
 	Avatar,
 	Tooltip,
 	Popover,
-	Popconfirm
+	Popconfirm,
+	Select,
+	DatePicker,
+	Tabs
 } from "ant-design-vue";
 
 // 中间件
@@ -40,6 +43,9 @@ const antdInstall: Plugin = app => {
 		.use(Avatar)
 		.use(Popover)
 		.use(Popconfirm)
+		.use(Select)
+		.use(DatePicker)
+		.use(Tabs)
 		.use(Tooltip);
 };
 

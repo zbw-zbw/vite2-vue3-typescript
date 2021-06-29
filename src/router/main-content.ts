@@ -106,7 +106,7 @@ export default [
 	{
 		path: "/order",
 		name: "Order",
-		component: () => import("@/views/shop-design/index.vue"),
+		component: (/* webpackChunkName: Order */) => import("@/views/order/index.vue"),
 		meta: {
 			title: "订单管理",
 			icon: "PayCircleOutlined"
