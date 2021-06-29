@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" href="/new-favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>小程序后台管理系统</title>
+	</head>
+	<body>
+		<div id="app"></div>
+		<script type="module" src="/src/main.ts"></script>
+		<!-- IE 浏览器跳转提示升级页面 start -->
+		<script>
+			if (/*@cc_on!@*/ false || (!!window.MSInputMethodContext && !!document.documentMode)) {
+				window.location.href(
+					"https://support.dmeng.net/upgrade-your-browser.html?referrer=" + encodeURIComponent(window.location.href)
+				);
+			}
+		</script>
+		<!-- IE 浏览器跳转提示升级页面 end -->
+		<script>
+			// 判断是否为IE浏览器
+			function isIE() {
+				return !!window.ActiveXObject || "ActiveXObject" in window;
+			}
+		</script>
+	</body>
+</html>
