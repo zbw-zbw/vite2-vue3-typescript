@@ -134,46 +134,61 @@
 					<a-col :span="2" class="text-align-r">操作</a-col>
 				</a-row>
 
-				<div v-for="item in [1, 2, 3]">
-					<!-- 表格操作栏 -->
-					<a-row class="table-action">
-						<a-col :span="16" class="text-align-l">
-							<span>订单号：12345678900000121</span>
-							<a @click="onMore('1')" class="more">更多</a>
-							<span>下单时间：2021-06-29 15:51:30</span>
-						</a-col>
-						<a-col :span="8" class="text-align-r">
-							<a @click="onDetail('1')">查看详情</a>
-							<span class="space">-</span>
-							<a @click="onRemark('1')">备注</a>
-						</a-col>
-					</a-row>
+				<!-- loading -->
+				<div class="table-loading" v-if="tableLoading"><a-spin :spinning="tableLoading" /></div>
 
-					<!-- 表格数据 -->
-					<a-row class="table-data">
-						<a-col :span="8" class="goods-data">
-							<img src="@/assets/logo.png" class="margin-right-8" width="60" height="60" />
-							<div>
-								<a @click="onMore('1')">WIS水润面膜女补水保湿 破尿酸清洁收缩毛孔 紧致控油</a>
-								<div class="count">3盒</div>
-								<div class="order-status">已发货</div>
-							</div>
-						</a-col>
-						<a-col :span="3" class="ceil padding-r-16 price">
-							<div>159.80</div>
-							<div>1件</div>
-						</a-col>
-						<a-col :span="2" class="ceil"></a-col>
-						<a-col :span="3" class="ceil">
-							<a>叫我欧文就好</a>
-							<div>Kyrie Wen</div>
-							<div>18888888888</div>
-						</a-col>
-						<a-col :span="2" class="ceil">快递寄出</a-col>
-						<a-col :span="2" class="ceil">159.80</a-col>
-						<a-col :span="2" class="ceil">商家已发货</a-col>
-					</a-row>
-				</div>
+				<!-- 列表数据 -->
+				<template v-else>
+					<div v-for="item in [1, 2, 3]">
+						<!-- 表格操作栏 -->
+						<a-row class="table-action">
+							<a-col :span="16" class="text-align-l">
+								<span>订单号：12345678900000121</span>
+								<a @click="onMore('1')" class="more">更多</a>
+								<span>下单时间：2021-06-29 15:51:30</span>
+							</a-col>
+							<a-col :span="8" class="text-align-r">
+								<a @click="onDetail('1')">查看详情</a>
+								<span class="space">-</span>
+								<a @click="onRemark('1')">备注</a>
+							</a-col>
+						</a-row>
+
+						<!-- 表格数据 -->
+						<a-row class="table-data">
+							<a-col :span="8" class="goods-data">
+								<img src="@/assets/logo.png" class="margin-right-8" width="60" height="60" />
+								<div>
+									<a @click="onMore('1')">WIS水润面膜女补水保湿 破尿酸清洁收缩毛孔 紧致控油</a>
+									<div class="count">3盒</div>
+									<div class="order-status">已发货</div>
+								</div>
+							</a-col>
+							<a-col :span="3" class="ceil padding-r-16 price">
+								<div>159.80</div>
+								<div>1件</div>
+							</a-col>
+							<a-col :span="2" class="ceil"></a-col>
+							<a-col :span="3" class="ceil">
+								<a>叫我欧文就好</a>
+								<div>Kyrie Wen</div>
+								<div>18888888888</div>
+							</a-col>
+							<a-col :span="2" class="ceil">快递寄出</a-col>
+							<a-col :span="2" class="ceil">159.80</a-col>
+							<a-col :span="2" class="ceil">商家已发货</a-col>
+						</a-row>
+					</div>
+
+					<!-- 分页 -->
+					<a-pagination
+						class="text-align-r"
+						show-quick-jumper
+						v-model:current="currentPage"
+						:total="100"
+						@change="onPageChange"
+					/>
+				</template>
 			</a-tab-pane>
 		</a-tabs>
 
@@ -191,7 +206,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, toRaw, UnwrapRef } from "@vue/runtime-core";
+import { defineComponent, onMounted, reactive, ref, toRaw, UnwrapRef } from "@vue/runtime-core";
 import router from "@/router";
 import options from "./options";
 
@@ -275,6 +290,8 @@ export default defineComponent({
 			console.log(activeKey);
 		};
 
+		const tableLoading = ref<boolean>(false);
+
 		/**
 		 * @description 查看更多
 		 */
@@ -314,6 +331,21 @@ export default defineComponent({
 			console.log(id);
 		};
 
+		/**
+		 * @description 列表分页
+		 */
+		const currentPage = 1;
+		const onPageChange = page => {
+			console.log(page);
+		};
+
+		onMounted(() => {
+			tableLoading.value = true;
+			setTimeout(() => {
+				tableLoading.value = false;
+			}, 2000);
+		});
+
 		return {
 			handleAfterOrder,
 			orderForm,
@@ -324,11 +356,14 @@ export default defineComponent({
 			OnReset,
 			currentTab,
 			onChangeTab,
+			tableLoading,
 			onMore,
 			onDetail,
 			remarkModal,
 			onRemark,
-			handleRemark
+			handleRemark,
+			currentPage,
+			onPageChange
 		};
 	}
 });
@@ -358,6 +393,13 @@ export default defineComponent({
 	margin-bottom: 16px;
 	text-align: center;
 	background: #fafafa;
+}
+
+.table-loading {
+	width: 100%;
+	text-align: center;
+	padding: 20px 0;
+	background: #fff;
 }
 
 .table-action {

@@ -21,7 +21,9 @@ import {
 	Select,
 	DatePicker,
 	Tabs,
-	Steps
+	Steps,
+	Spin,
+	Pagination
 } from "ant-design-vue";
 
 // 中间件
@@ -48,6 +50,8 @@ const antdInstall: Plugin = app => {
 		.use(DatePicker)
 		.use(Tabs)
 		.use(Steps)
+		.use(Spin)
+		.use(Pagination)
 		.use(Tooltip);
 };
 

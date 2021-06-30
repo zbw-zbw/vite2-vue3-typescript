@@ -11,7 +11,7 @@
 					<template #title>
 						<span>刷新</span>
 					</template>
-					<ReloadOutlined class="cur-point" />
+					<ReloadOutlined class="cur-point" @click="refresh" />
 				</a-tooltip>
 				<a-tooltip placement="bottom">
 					<template #title>
@@ -68,6 +68,8 @@ import {
 } from "@ant-design/icons-vue";
 
 import { Modal } from "ant-design-vue";
+import router from "@/router";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
 	name: "TheHeader",
@@ -89,6 +91,14 @@ export default defineComponent({
 		QuestionCircleOutlined
 	},
 	setup() {
+		const route = useRoute();
+		/**
+		 * @description 刷新
+		 */
+		const refresh = () => {
+			router.replace({ name: "Redirect", params: { path: route.fullPath } });
+		};
+
 		/**
 		 * @description 修改头像
 		 */
@@ -118,6 +128,7 @@ export default defineComponent({
 		};
 
 		return {
+			refresh,
 			userName,
 			avatarBgColor,
 			changeUserName,

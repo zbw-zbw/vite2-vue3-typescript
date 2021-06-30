@@ -16,6 +16,11 @@ export const routes: Array<RouteRecordRaw> = [
 		redirect: defaultRoute
 	},
 	{
+		path: "/redirect",
+		name: "Redirect",
+		component: () => import("@/components/redirect.vue")
+	},
+	{
 		path: defaultRoute,
 		name: "Layout",
 		component: (/* webpackChunkName: "Layout" */) => import("@/layout/index.vue"),

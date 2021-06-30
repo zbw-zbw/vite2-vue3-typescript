@@ -152,7 +152,6 @@ export default defineComponent({
 				data.list = items;
 				data.loading = false;
 			} catch (error) {
-				console.log(error);
 				data.list = error.items; // 这里走error是因为axios里我默认封装是以data为返回值，这里借用采购的接口 返回的是items
 				const { currentPage: current, perPage: pageSize, totalCount: total } = error._meta;
 				paginationOptions.current = current;
