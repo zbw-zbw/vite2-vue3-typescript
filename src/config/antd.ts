@@ -20,7 +20,8 @@ import {
 	Popconfirm,
 	Select,
 	DatePicker,
-	Tabs
+	Tabs,
+	Steps
 } from "ant-design-vue";
 
 // 中间件
@@ -46,6 +47,7 @@ const antdInstall: Plugin = app => {
 		.use(Select)
 		.use(DatePicker)
 		.use(Tabs)
+		.use(Steps)
 		.use(Tooltip);
 };
 

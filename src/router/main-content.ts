@@ -113,6 +113,15 @@ export default [
 		}
 	},
 	{
+		path: "/order/detail",
+		name: "OrderDetail",
+		component: (/* webpackChunkName: OrderDetail */) => import("@/views/order/detail.vue"),
+		meta: {
+			title: "订单详情",
+			hidden: true
+		}
+	},
+	{
 		path: "/fans",
 		name: "Fans",
 		component: () => import("@/views/shop-design/index.vue"),

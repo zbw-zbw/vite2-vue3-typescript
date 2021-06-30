@@ -35,7 +35,6 @@ export default defineComponent({
 	setup() {
 		const store = useStore(key);
 		const breadcrumbItems = computed(() => store.getters["user/breadcrumbItems"]);
-		console.log(breadcrumbItems.value);
 
 		return { breadcrumbItems };
 	}

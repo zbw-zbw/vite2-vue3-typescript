@@ -1,7 +1,7 @@
 <template>
 	<template v-if="menuData.meta && !menuData.meta.hidden">
 		<!-- 判断是否有子路由 -->
-		<a-sub-menu v-if="menuData.children?.length" :key="menuData.name">
+		<a-sub-menu v-if="menuData.children?.length && !menuData.meta?.hidden" :key="menuData.name">
 			<template #title>
 				<component :is="menuData.meta.icon"></component>
 				<span>{{ menuData.meta.title }}</span>
@@ -59,8 +59,7 @@ export default defineComponent({
 			type: Object,
 			default: () => ({})
 		}
-	},
-	setup() {}
+	}
 });
 </script>
 

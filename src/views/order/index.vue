@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<!-- 顶部提示信息 -->
 		<a-alert type="info" show-icon closable>
 			<template #message>
 				线上线下订单管理，售后问题批量解决。
@@ -7,6 +8,7 @@
 			</template>
 		</a-alert>
 
+		<!-- 搜索表单 -->
 		<a-form ref="orderFormRef" :model="orderForm" class="search-form">
 			<a-row type="flex" justify="start" :gutter="[16, 16]">
 				<a-col :xxl="4" :xl="6">
@@ -31,13 +33,13 @@
 						<a-row>
 							<a-col :span="11">
 								<a-form-item name="orderStartTime">
-									<a-date-picker style="width: 100%" show-time v-model:value="orderForm.orderStartTime" />
+									<a-date-picker class="full-width" show-time v-model:value="orderForm.orderStartTime" />
 								</a-form-item>
 							</a-col>
-							<a-col :span="2" style="text-align: center"><span class="date-gap">至</span></a-col>
+							<a-col :span="2" class="text-align-c"><span class="date-gap">至</span></a-col>
 							<a-col :span="11">
 								<a-form-item name="orderEndTime">
-									<a-date-picker style="width: 100%" show-time v-model:value="orderForm.orderEndTime" />
+									<a-date-picker class="full-width" show-time v-model:value="orderForm.orderEndTime" />
 								</a-form-item>
 							</a-col>
 						</a-row>
@@ -111,12 +113,13 @@
 				<a-col :xxl="12" :xl="6"></a-col>
 			</a-row>
 
-			<a-form-item style="margin-left: 70px">
+			<a-form-item class="submit-btns">
 				<a-button type="primary" @click="onSubmit">筛选</a-button>
-				<a-button style="margin-left: 10px" @click="OnReset">重置</a-button>
+				<a-button class="reset" @click="OnReset">重置</a-button>
 			</a-form-item>
 		</a-form>
 
+		<!-- tabs -->
 		<a-tabs type="card" v-model:activeKey="currentTab" @change="onChangeTab">
 			<a-tab-pane v-for="item in options.orderStatusList" :key="item.value" :tab="item.label">
 				<!-- 表头 -->
@@ -136,12 +139,12 @@
 					<a-row class="table-action">
 						<a-col :span="16" class="text-align-l">
 							<span>订单号：12345678900000121</span>
-							<a @click="onMore('1')" style="padding: 0 12px">更多</a>
+							<a @click="onMore('1')" class="more">更多</a>
 							<span>下单时间：2021-06-29 15:51:30</span>
 						</a-col>
 						<a-col :span="8" class="text-align-r">
 							<a @click="onDetail('1')">查看详情</a>
-							<span style="padding: 0 4px">-</span>
+							<span class="space">-</span>
 							<a @click="onRemark('1')">备注</a>
 						</a-col>
 					</a-row>
@@ -149,14 +152,14 @@
 					<!-- 表格数据 -->
 					<a-row class="table-data">
 						<a-col :span="8" class="goods-data">
-							<img src="@/assets/logo.png" style="margin-right: 8px" width="60" height="60" />
+							<img src="@/assets/logo.png" class="margin-right-8" width="60" height="60" />
 							<div>
-								<a @click="onMore('1')" style="margin-bottom: 6px">WIS水润面膜女补水保湿 破尿酸清洁收缩毛孔 紧致控油</a>
-								<div>3盒</div>
+								<a @click="onMore('1')">WIS水润面膜女补水保湿 破尿酸清洁收缩毛孔 紧致控油</a>
+								<div class="count">3盒</div>
 								<div class="order-status">已发货</div>
 							</div>
 						</a-col>
-						<a-col :span="3" class="ceil padding-r-16" style="align-items: flex-end">
+						<a-col :span="3" class="ceil padding-r-16 price">
 							<div>159.80</div>
 							<div>1件</div>
 						</a-col>
@@ -173,6 +176,8 @@
 				</div>
 			</a-tab-pane>
 		</a-tabs>
+
+		<!-- 卖家备注弹窗 -->
 		<a-modal v-model:visible="remarkModal.visible" title="卖家备注" @ok="handleRemark">
 			<a-textarea
 				placeholder="请输入..."
@@ -187,7 +192,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, toRaw, UnwrapRef } from "@vue/runtime-core";
+import router from "@/router";
 import options from "./options";
+
+/**
+ * @description 搜索表单接口
+ */
 interface IOrderForm {
 	orderSearchType: string | undefined;
 	orderNum: string | undefined;
@@ -200,6 +210,7 @@ interface IOrderForm {
 	delivery: string | undefined;
 	payMethod: string | undefined;
 }
+
 export default defineComponent({
 	name: "Order",
 	setup() {
@@ -276,15 +287,19 @@ export default defineComponent({
 		 */
 		const onDetail = (id: string) => {
 			console.log(id);
+			router.push({ path: "/order/detail" });
 		};
 
+		/**
+		 * @description 卖家备注数据
+		 */
 		const remarkModal = reactive({
 			visible: false,
 			remark: ""
 		});
 
 		/**
-		 * @description 卖家备注
+		 * @description 打开卖家备注弹窗
 		 */
 		const onRemark = (id: string) => {
 			console.log(id);
@@ -293,7 +308,7 @@ export default defineComponent({
 		};
 
 		/**
-		 * @description 提交备注
+		 * @description 提交卖家备注
 		 */
 		const handleRemark = (id: string) => {
 			console.log(id);
@@ -349,6 +364,14 @@ export default defineComponent({
 	padding: 16px;
 	background: #fafafa;
 	border: 1px solid #ececec;
+
+	.more {
+		padding: 0 12px;
+	}
+
+	.space {
+		padding: 0 4px;
+	}
 }
 
 .table-data {
@@ -365,11 +388,19 @@ export default defineComponent({
 		border-right: 1px solid #ececec;
 	}
 
+	.price {
+		align-items: flex-end;
+	}
+
 	.goods-data {
 		display: flex;
 		align-items: center;
 		text-align: left;
 		padding: 12px;
+
+		.count {
+			margin: 6px 0 2px;
+		}
 	}
 
 	.order-status {
@@ -381,21 +412,19 @@ export default defineComponent({
 	}
 }
 
-.text-align-l {
-	text-align: left;
+.submit-btns {
+	margin-left: 70px;
+
+	.reset {
+		margin-left: 10px;
+	}
 }
 
-.text-align-r {
-	text-align: right;
+.margin-right-8 {
+	margin-right: 8px;
 }
 
 .padding-r-16 {
 	padding-right: 16px;
-}
-
-.flex-center {
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }
 </style>
