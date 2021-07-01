@@ -4,6 +4,14 @@
 			<span class="menu-fold" @click="() => $emit('update:collapsed', !collapsed)">
 				<component :is="collapsed ? 'MenuUnfoldOutlined' : 'MenuFoldOutlined'" />
 			</span>
+			<!-- 面包屑 -->
+			<a-breadcrumb class="breadcrumb">
+				<template v-for="item in breadcrumbItems" :key="item.path">
+					<a-breadcrumb-item v-if="item.title">
+						<router-link :to="item.path">{{ item.title }}</router-link>
+					</a-breadcrumb-item>
+				</template>
+			</a-breadcrumb>
 		</a-col>
 		<a-col :span="8" align="right">
 			<a-space size="middle" class="right-content">
@@ -54,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { createVNode, defineComponent, ref } from "@vue/runtime-core";
+import { computed, createVNode, defineComponent, ref } from "@vue/runtime-core";
 import {
 	UserOutlined,
 	MenuUnfoldOutlined,
@@ -71,6 +79,8 @@ import {
 import { Modal } from "ant-design-vue";
 import router from "@/router";
 import { useRoute } from "vue-router";
+import { useStore } from "vuex";
+import { key } from "@/store";
 
 export default defineComponent({
 	name: "TheHeader",
@@ -94,6 +104,9 @@ export default defineComponent({
 	},
 	setup() {
 		const route = useRoute();
+		const store = useStore(key);
+		const breadcrumbItems = computed(() => store.getters["user/breadcrumbItems"]);
+
 		/**
 		 * @description 刷新
 		 */
@@ -144,6 +157,7 @@ export default defineComponent({
 		};
 
 		return {
+			breadcrumbItems,
 			refresh,
 			fullScreenDOM,
 			toggleFullScreen,
@@ -160,6 +174,15 @@ export default defineComponent({
 .menu-fold {
 	cursor: pointer;
 	font-size: 18px;
+}
+
+.breadcrumb {
+	height: 52px;
+	line-height: 52px;
+	padding-left: 20px;
+	display: inline-block;
+	margin-top: -8px;
+	vertical-align: middle;
 }
 
 .right-content {
