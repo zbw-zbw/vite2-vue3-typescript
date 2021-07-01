@@ -18,7 +18,7 @@ export const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/redirect",
 		name: "Redirect",
-		component: () => import("@/components/redirect.vue")
+		component: () => import("@/components/Redirect.vue")
 	},
 	{
 		path: defaultRoute,
@@ -54,6 +54,7 @@ router.beforeEach((to, from, next) => {
 	} else {
 		to.name === "Login" ? next() : next({ path: "/login", query: { redirect: to.fullPath }, replace: true });
 	}
+
 	NProgress.done();
 });
 

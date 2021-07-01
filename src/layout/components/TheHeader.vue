@@ -15,9 +15,9 @@
 				</a-tooltip>
 				<a-tooltip placement="bottom">
 					<template #title>
-						<span>全屏</span>
+						<span>{{ fullScreenDOM === "ExpandOutlined" ? "全屏" : "退出全屏" }}</span>
 					</template>
-					<ExpandOutlined class="cur-point" />
+					<component :is="fullScreenDOM" class="cur-point" @click="toggleFullScreen"></component>
 				</a-tooltip>
 				<a-tooltip placement="bottom">
 					<template #title>
@@ -42,9 +42,9 @@
 					</a-avatar>
 					<template #overlay>
 						<a-menu>
-							<div style="padding: 5px 12px">你好，张宝文~</div>
-							<a-menu-item @click="$router.push('/personal-center')"> <UserOutlined />个人中心 </a-menu-item>
-							<a-menu-item @click="handleLogOut"> <PoweroffOutlined />退出登录 </a-menu-item>
+							<div style="padding: 5px 12px">你好，超管~</div>
+							<a-menu-item @click="$router.push('/personal-center')"><UserOutlined />个人中心</a-menu-item>
+							<a-menu-item @click="handleLogOut"><PoweroffOutlined />退出登录</a-menu-item>
 						</a-menu>
 					</template>
 				</a-dropdown>
@@ -62,6 +62,7 @@ import {
 	ReloadOutlined,
 	LockOutlined,
 	ExpandOutlined,
+	CompressOutlined,
 	BellOutlined,
 	PoweroffOutlined,
 	QuestionCircleOutlined
@@ -86,6 +87,7 @@ export default defineComponent({
 		ReloadOutlined,
 		LockOutlined,
 		ExpandOutlined,
+		CompressOutlined,
 		BellOutlined,
 		PoweroffOutlined,
 		QuestionCircleOutlined
@@ -97,6 +99,20 @@ export default defineComponent({
 		 */
 		const refresh = () => {
 			router.replace({ name: "Redirect", params: { path: route.fullPath } });
+		};
+
+		/**
+		 * @description 切换全屏
+		 */
+		const fullScreenDOM = ref<string>("ExpandOutlined");
+		const toggleFullScreen = () => {
+			if (fullScreenDOM.value === "ExpandOutlined") {
+				document.documentElement.requestFullscreen();
+				fullScreenDOM.value = "CompressOutlined";
+			} else {
+				document.exitFullscreen();
+				fullScreenDOM.value = "ExpandOutlined";
+			}
 		};
 
 		/**
@@ -129,6 +145,8 @@ export default defineComponent({
 
 		return {
 			refresh,
+			fullScreenDOM,
+			toggleFullScreen,
 			userName,
 			avatarBgColor,
 			changeUserName,
